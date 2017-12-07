@@ -1,0 +1,12 @@
+.super {
+  display: flex;
+}
+.subsuper {
+  flex: auto;
+  border: 1px solid;
+}
+
+#dropZone{
+  margin: 20px;
+  border: 5px dashed gray;
+}

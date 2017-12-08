@@ -10,17 +10,21 @@
 </head>
 
 <body>
-  Line width: <input type="number" value=60></input>
-  Background: <input type="color"></input> <input type="text" value="FFFFFF" maxlength="6"></input>
-  CSS class prefix: </input> <input type="text" value="i_"></input>
-  <button id ="btnCopyHTML">Copy HTML</button>
-  <div id="dropZone">Drop files here</div>
-  <div class="super">
-    <div class="subsuper imagePreview"><canvas id="imageCanvas"></canvas>
+  <div id="dropZone">Drop your image here</div>
+  <div id="menu">
+    Line width: <input type="number" value=60 id='lineWidth'></input>
+    Background: <input type="text" value="000000" maxlength="7" id="imageBackround"></input>
+    CSS class prefix: <input type="text" value="i_" id="cssPrefix"></input>
+    Charset: <input type="text" value="01" id="charset"></input>
+    <button id="btnRender">Render</button>
+    <button id="btnCopyHTML">Copy HTML</button>
+    <div class="super">
+      <div class="subsuper" id="imagePreview"><canvas id="imageCanvas"></canvas>
+      </div>
+      <div class="subsuper" id="htmlImage"></div>
     </div>
-    <div class="subsuper" id="htmlImage"></div>
+    <textarea class="subsuper" id="htmlCode" placeholder="Here will be your HTML code"></textarea>
   </div>
-  <textarea class="subsuper" id="htmlCode" placeholder="Here will be your HTML code"></textarea>
 </body>
 
 </html>

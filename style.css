@@ -1,11 +1,28 @@
+body {
+  background: #000000;
+  color: #ffffff;
+}
+
+textarea {
+  color: #ffe049;
+  background: #2b4a76;
+  width: 100%;
+  height: 20em;
+}
+
 .super {
   display: flex;
 }
+
 .subsuper {
   flex: auto;
   border: 1px solid;
   overflow-y: auto;
   overflow-x: auto;
+}
+
+#menu {
+  visibility: hidden;
 }
 
 #htmlCode {
@@ -14,6 +31,15 @@
 }
 
 #dropZone{
+  position: absolute;
+  top: 40%;
+  left: 2%;
+  width: 95%;
   margin: 20px;
-  border: 5px dashed gray;
+  border: 5px dashed #c9c6ce;
+  text-align: center;
+  font-family: fantasy;
+  font-size: 2em;
+  background: #fee7e2;
+  color: #541a86;
 }

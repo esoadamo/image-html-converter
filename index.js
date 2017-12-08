@@ -1,8 +1,9 @@
+// Global variables are initializated upon window load
 let CANVAS_CONTEXT = null;
 let CANVAS = null;
-let LINE_WIDTH = 60;
+let LINE_WIDTH = null;
 let HTML_CODE = null;
-let CLASS_PREFIX = "i_";
+let CLASS_PREFIX = null;
 
 
 function renderImage(src) {
@@ -22,21 +23,23 @@ function renderHTML() {
   let htmlImage = document.getElementById('htmlImage');
   htmlImage.innerHTML = '';
 
-  let mainDiv = document.createElement('div');
+  let mainDiv = document.createElement('span');
   let styleTag = document.createElement('style');
   mainDiv.appendChild(styleTag);
 
-  let xMove = CANVAS.width / LINE_WIDTH;
+  let xMove = CANVAS.width / LINE_WIDTH.value;
   let yMove = xMove * 2.5; // font is 2.5 times higher than wider
+
+  let charset = document.getElementById('charset').value.split('');
 
   let classes = {};
 
   let mainItemClass = nextClassName(null);
   let lastClassName = mainItemClass;
-  mainItemClass = CLASS_PREFIX + mainItemClass;
+  mainItemClass = CLASS_PREFIX.value + mainItemClass;
   styleTag.innerHTML += '.' + mainItemClass + '{display: inline; font-family:"Lucida Console", Monaco, monospace;font-size:0.8em;}'
   for (var y = 0; y < CANVAS.height; y += yMove) {
-    let subdiv = document.createElement('div');
+    let subdiv = document.createElement('span');
     for (var x = 0; x < CANVAS.width; x += xMove) {
       let pixelData = CANVAS_CONTEXT.getImageData(Math.round(x), Math.round(y), 1, 1).data;
       let item = document.createElement('p');
@@ -50,7 +53,7 @@ function renderHTML() {
         className = classes[classKey];
       } else {
         lastClassName = nextClassName(lastClassName);
-        className = CLASS_PREFIX + lastClassName;
+        className = CLASS_PREFIX.value + lastClassName;
         styleTag.innerHTML += '.' + className + "{";
         if (opacity > 0) // if this is invisible, do not care about colour
           styleTag.innerHTML += "color:" + color + ";";
@@ -61,10 +64,11 @@ function renderHTML() {
       }
       item.className = className + ' ' + mainItemClass;
 
-      item.innerHTML = 'X';
+      item.innerHTML = charset[Math.floor(Math.random() * charset.length)];
       subdiv.appendChild(item);
     }
     mainDiv.appendChild(subdiv);
+    mainDiv.appendChild(document.createElement('br'));
   }
   htmlImage.appendChild(mainDiv);
   HTML_CODE.textContent = htmlImage.innerHTML;
@@ -105,12 +109,14 @@ function rgbToHex(r, g, b) {
 
 function loadImage(src) {
   if (!src.type.match(/image.*/)) {
-    console.log("The dropped file is not an image: ", src.type); // TODO show nice popup window
+    alert("The dropped file is not an image: " + src.type);
     return;
   }
 
   var reader = new FileReader();
   reader.onload = function(e) {
+    document.getElementById('dropZone').style.visibility = "hidden";
+    document.getElementById('menu').style.visibility = "visible";
     renderImage(e.target.result);
   };
   reader.readAsDataURL(src);
@@ -121,16 +127,21 @@ window.onload = () => {
   CANVAS = document.getElementById("imageCanvas");
   CANVAS_CONTEXT = CANVAS.getContext("2d");
   HTML_CODE = document.getElementById('htmlCode');
+  CLASS_PREFIX = document.getElementById('cssPrefix');
+  LINE_WIDTH = document.getElementById('lineWidth');
 
-  let target = document.getElementById("dropZone");
-  target.addEventListener(
+  /*
+  Handle image dropdowns
+  */
+  let dropDownZone = document.getElementById("dropZone");
+  dropDownZone.addEventListener(
     "dragover",
     function(e) {
       e.preventDefault();
     },
     true
   );
-  target.addEventListener(
+  dropDownZone.addEventListener(
     "drop",
     function(e) {
       e.preventDefault();
@@ -138,6 +149,22 @@ window.onload = () => {
     },
     true
   );
+
+  /*
+  Change image backgound upon change
+  */
+  let inputBackground = document.getElementById('imageBackround');
+  inputBackground.addEventListener('input', () => {
+      let background = inputBackground.value.slice(0, 1) == '#' ? inputBackground.value : ('#' + inputBackground.value);
+      document.getElementById('imagePreview').style.background = background;
+      document.getElementById('htmlImage').style.background = background;
+  });
+
+  /*
+  Render HTML image and generate code upon button click
+  */
+  let btnRender = document.getElementById('btnRender');
+  btnRender.addEventListener('click', renderHTML);
 
   /*
   Copy generated HTML code into clipboard when button is clicked

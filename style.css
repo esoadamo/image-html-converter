@@ -4,6 +4,15 @@
 .subsuper {
   flex: auto;
   border: 1px solid;
+  // max-width: 33%;
+  overflow-y: auto;
+  overflow-x: auto;
+  font-family: monospace;
+}
+
+#htmlImage {
+  font-size: 0.8em;
+  background: black;
 }
 
 #dropZone{

@@ -10,13 +10,17 @@
 </head>
 
 <body>
+  Line width: <input type="number" value=60></input>
+  Background: <input type="color"></input> <input type="text" value="FFFFFF" maxlength="6"></input>
+  CSS class prefix: </input> <input type="text" value="i_"></input>
+  <button id ="btnCopyHTML">Copy HTML</button>
   <div id="dropZone">Drop files here</div>
   <div class="super">
     <div class="subsuper imagePreview"><canvas id="imageCanvas"></canvas>
     </div>
     <div class="subsuper" id="htmlImage"></div>
-    <div class="subsuper">Here will be a HTML code</div>
   </div>
+  <textarea class="subsuper" id="htmlCode" placeholder="Here will be your HTML code"></textarea>
 </body>
 
 </html>

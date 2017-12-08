@@ -62,7 +62,7 @@ function renderHTML() {
         styleTag.innerHTML += "}";
         classes[classKey] = className;
       }
-      item.className = className + ' ' + mainItemClass;
+      item.className = mainItemClass + ' ' + className;
 
       item.innerHTML = charset[Math.floor(Math.random() * charset.length)];
       subdiv.appendChild(item);

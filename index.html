@@ -12,15 +12,17 @@
 <body>
   <div id="dropZone">Drop your image here</div>
   <div id="menu">
-    Line width: <input type="number" value=60 id='lineWidth'></input>
-    Background: <input type="text" value="000000" maxlength="7" id="imageBackround"></input>
-    CSS class prefix: <input type="text" value="i_" id="cssPrefix"></input>
-    Charset: <input type="text" value="01" id="charset"></input>
-    <button id="btnRender">Render</button>
-    <button id="btnCopyHTML">Copy HTML</button>
+    <div>
+      Line width: <input type="number" value=60 id='lineWidth'></input>
+      Background: <input type="text" value="000000" maxlength="7" id="imageBackround"></input>
+      CSS class prefix: <input type="text" value="i_" id="cssPrefix"></input>
+      Charset: <input type="text" value="01" id="charset"></input>
+      Font size: <input type="number" value="10" id="fontSize" min="1"></input>px
+      <button id="btnRender">Render</button>
+      <button id="btnCopyHTML">Copy HTML</button>
+    </div>
     <div class="super">
-      <div class="subsuper" id="imagePreview"><canvas id="imageCanvas"></canvas>
-      </div>
+      <div class="subsuper" id="imagePreview"><canvas id="imageCanvas"></canvas></div>
       <div class="subsuper" id="htmlImage"></div>
     </div>
     <textarea class="subsuper" id="htmlCode" placeholder="Here will be your HTML code"></textarea>

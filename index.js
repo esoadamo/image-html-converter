@@ -4,6 +4,7 @@ let CANVAS = null;
 let LINE_WIDTH = null;
 let HTML_CODE = null;
 let CLASS_PREFIX = null;
+let FONT_SIZE = null;
 
 
 function renderImage(src) {
@@ -28,7 +29,7 @@ function renderHTML() {
   mainDiv.appendChild(styleTag);
 
   let xMove = CANVAS.width / LINE_WIDTH.value;
-  let yMove = xMove * 2.5; // font is 2.5 times higher than wider
+  let yMove = xMove * 1.68; // font is 1.68 times higher than wider
 
   let charset = document.getElementById('charset').value.split('');
 
@@ -37,38 +38,40 @@ function renderHTML() {
   let mainItemClass = nextClassName(null);
   let lastClassName = mainItemClass;
   mainItemClass = CLASS_PREFIX.value + mainItemClass;
-  styleTag.innerHTML += '.' + mainItemClass + '{display: inline; font-family:"Lucida Console", Monaco, monospace;font-size:0.8em;}'
+  styleTag.innerHTML += `.${mainItemClass}{display:inline;font-family:"Lucida Console",Monaco,monospace;font-size:${FONT_SIZE.value}px;} ${CLASS_PREFIX.value}{display:block;height:${FONT_SIZE.value}px;}`
+  let imgData = CANVAS_CONTEXT.getImageData(0, 0, CANVAS.width, CANVAS.height).data;
   for (var y = 0; y < CANVAS.height; y += yMove) {
-    let subdiv = document.createElement('span');
+    let subdiv = document.createElement(CLASS_PREFIX.value);
     for (var x = 0; x < CANVAS.width; x += xMove) {
-      let pixelData = CANVAS_CONTEXT.getImageData(Math.round(x), Math.round(y), 1, 1).data;
-      let item = document.createElement('p');
+      let pixelData = CANVAS_CONTEXT.getImageData(Math.floor(x), Math.floor(y), 1, 1).data;
+
       let color = rgbToHex(pixelData[0], pixelData[1], pixelData[2]);
       let opacity = pixelData[3] / 255;
 
       let classKey = opacity > 0 ? (color + ':' + opacity) : 'invisible';
 
       let className = null;
-      if (classKey in classes) {
+      if ((classKey in classes)) {
         className = classes[classKey];
       } else {
         lastClassName = nextClassName(lastClassName);
         className = CLASS_PREFIX.value + lastClassName;
-        styleTag.innerHTML += '.' + className + "{";
+        styleTag.innerHTML += className + "{";
         if (opacity > 0) // if this is invisible, do not care about colour
           styleTag.innerHTML += "color:" + color + ";";
-        if (Math.abs(1 - opacity) > 0.01)  // opacity is 99% or less
+        if (Math.abs(1 - opacity) > 0.01) // opacity is 99% or less
           styleTag.innerHTML += "opacity:" + opacity + ";";
         styleTag.innerHTML += "}";
         classes[classKey] = className;
       }
-      item.className = mainItemClass + ' ' + className;
+
+      let item = document.createElement(className);
+      item.className = mainItemClass;
 
       item.innerHTML = charset[Math.floor(Math.random() * charset.length)];
       subdiv.appendChild(item);
     }
     mainDiv.appendChild(subdiv);
-    mainDiv.appendChild(document.createElement('br'));
   }
   htmlImage.appendChild(mainDiv);
   HTML_CODE.textContent = htmlImage.innerHTML;
@@ -76,25 +79,18 @@ function renderHTML() {
 
 function nextClassName(lastClassName) {
   if (!lastClassName)
-    return 'a';
-
-  let tail = '';
-  let i = lastClassName.length - 1;
-  let char = lastClassName[i];
-
-  while (char === 'Z' && i > 0) {
-    i--;
-    char = lastClassName[i];
-    tail = 'a' + tail;
-  }
-  if (char === 'Z')
-    return 'aa' + tail;
-
-  if (char == 'z')
-    return lastClassName.slice(0, i) + 'A';
-
-  return lastClassName.slice(0, i) + String.fromCharCode(char.charCodeAt(0) + 1) + tail;
-
+        return 'a';
+    let tail = '';
+    let i = lastClassName.length -1;
+    let char = lastClassName[i];
+    while (char === 'z' && i > 0) {
+        i--;
+        char = lastClassName[i];
+        tail = 'a' + tail;
+    }
+    if (char === 'z')
+        return 'aa' + tail;
+    return lastClassName.slice(0, i) + String.fromCharCode(char.charCodeAt(0) + 1) + tail;
 }
 
 function hexFormat(c) {
@@ -129,6 +125,7 @@ window.onload = () => {
   HTML_CODE = document.getElementById('htmlCode');
   CLASS_PREFIX = document.getElementById('cssPrefix');
   LINE_WIDTH = document.getElementById('lineWidth');
+  FONT_SIZE = document.querySelector('#fontSize');
 
   /*
   Handle image dropdowns
@@ -155,9 +152,9 @@ window.onload = () => {
   */
   let inputBackground = document.getElementById('imageBackround');
   inputBackground.addEventListener('input', () => {
-      let background = inputBackground.value.slice(0, 1) == '#' ? inputBackground.value : ('#' + inputBackground.value);
-      document.getElementById('imagePreview').style.background = background;
-      document.getElementById('htmlImage').style.background = background;
+    let background = inputBackground.value.slice(0, 1) == '#' ? inputBackground.value : ('#' + inputBackground.value);
+    document.getElementById('imagePreview').style.background = background;
+    document.getElementById('htmlImage').style.background = background;
   });
 
   /*

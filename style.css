@@ -15,7 +15,7 @@ textarea {
 }
 
 .subsuper {
-  flex: auto;
+  flex-grow: 1;
   border: 1px solid;
   overflow-y: auto;
   overflow-x: auto;
@@ -27,7 +27,7 @@ textarea {
 
 #htmlCode {
   font-family:"Lucida Console", Monaco, monospace;
-  font-size:0.5em;
+  font-size:10px;
 }
 
 #dropZone{
